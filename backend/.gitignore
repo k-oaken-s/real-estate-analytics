@@ -1,0 +1,51 @@
+# Go関連
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+bin/
+go.work
+
+# IDE関連
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# ビルド成果物
+dist/
+build/
+
+# 環境設定ファイル
+.env
+.env.*
+!.env.example
+
+# ログファイル
+*.log
+
+# データベース関連
+*.db
+dump.rdb
+
+# キャッシュディレクトリ
+tmp/
+
+# Docker関連
+docker-compose.override.yml
+
+# 依存関係
+vendor/
+
+# プロジェクト固有の一時ファイル
+/config.yaml
+/config.*.yaml
+!config.example.yaml
+
+# OS関連
+Thumbs.db
+.DS_Store
