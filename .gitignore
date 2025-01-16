@@ -16,3 +16,6 @@ frontend/yarn-error.log*
 # Common
 .DS_Store
 *.log
+
+.vscode/
+.env.local
