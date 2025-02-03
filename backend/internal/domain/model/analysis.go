@@ -1,21 +1,34 @@
 package model
 
-type PriceAnalysis struct {
-    Area           string    `json:"area"`            // 対象エリア
-    CurrentPrice   float64   `json:"current_price"`   // 現在の平均価格
-    PredictedPrice float64   `json:"predicted_price"` // 予測価格
-    Confidence     float64   `json:"confidence"`      // 予測の信頼度
-    Factors        []Factor  `json:"factors"`         // 価格変動要因
-}
-
-type Factor struct {
-    Name     string  `json:"name"`      // 要因名（人口増減、開発計画など）
-    Impact   float64 `json:"impact"`    // 価格への影響度（パーセンテージ）
-    Trend    string  `json:"trend"`     // 傾向（上昇/下降）
+type AreaAnalysis struct {
+    Area            string          `json:"area"`
+    CurrentPrice    float64         `json:"currentPrice"`
+    PredictedPrice  float64         `json:"predictedPrice"`
+    Confidence      float64         `json:"confidence"`
+    TransactionCount int            `json:"transactionCount"`
+    PriceChange     float64         `json:"priceChange"`
+    PriceTrends     []PriceTrend    `json:"priceTrends"`
+    PriceStats      PriceStats      `json:"priceStats"`
+    Factors         []Factor        `json:"factors"`
 }
 
 type PriceTrend struct {
-    Period    string  `json:"period"`     // 期間（年月）
-    AvgPrice  float64 `json:"avg_price"`  // 平均価格
-    Change    float64 `json:"change"`     // 前期比変動率
+    Month          string  `json:"month"`
+    AveragePrice   float64 `json:"averagePrice"`
+    TransactionCount int   `json:"transactionCount"`
+    PriceChange    float64 `json:"priceChange"`
+}
+
+type PriceStats struct {
+    MinPrice       float64 `json:"minPrice"`
+    MaxPrice       float64 `json:"maxPrice"`
+    MedianPrice    float64 `json:"medianPrice"`
+    AverageLandArea float64 `json:"averageLandArea"`
+    AverageBuildingAge float64 `json:"averageBuildingAge"`
+}
+
+type Factor struct {
+    Name     string  `json:"name"`
+    Impact   float64 `json:"impact"`
+    Trend    string  `json:"trend"`
 }

@@ -3,6 +3,7 @@ package db
 import (
 	"context"
 	"real-estate-analytics/internal/domain/model"
+	"time"
 
 	"gorm.io/gorm"
 )
@@ -13,6 +14,21 @@ type propertyRepository struct {
 
 func NewPropertyRepository(db *gorm.DB) *propertyRepository {
     return &propertyRepository{db: db}
+}
+
+func (r *propertyRepository) FindByAreaWithTimeRange(ctx context.Context, prefecture, city string, startDate, endDate time.Time) ([]*model.Property, error) {
+    var properties []*model.Property
+    result := r.db.WithContext(ctx).
+        Where("prefecture = ? AND city = ? AND transaction_date BETWEEN ? AND ?", 
+            prefecture, city, startDate, endDate).
+        Order("transaction_date ASC").
+        Find(&properties)
+    
+    if result.Error != nil {
+        return nil, result.Error
+    }
+    
+    return properties, nil
 }
 
 func (r *propertyRepository) Create(ctx context.Context, property *model.Property) error {

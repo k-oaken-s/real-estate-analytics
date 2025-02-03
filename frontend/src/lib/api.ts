@@ -19,29 +19,62 @@ export interface Property {
   latitude: number;
   longitude: number;
 }
-
 export interface AreaAnalysis {
   area: string;
   currentPrice: number;
   predictedPrice: number;
   confidence: number;
-  factors: {
-    name: string;
-    impact: number;
-    trend: 'up' | 'down' | 'stable';
-  }[];
+  transactionCount: number;
+  priceChange: number;
+  priceTrends: PriceTrend[];
+  priceStats: PriceStats;
+  factors: Factor[];
 }
 
-export const fetchAreaAnalysis = async (prefecture: string, city: string): Promise<AreaAnalysis> => {
+export interface PriceTrend {
+  month: string;
+  averagePrice: number;
+  transactionCount: number;
+  priceChange: number;
+}
+
+export interface PriceStats {
+  minPrice: number;
+  maxPrice: number;
+  medianPrice: number;
+  averageLandArea: number;
+  averageBuildingAge: number;
+}
+
+export interface Factor {
+  name: string;
+  impact: number;
+  trend: string;
+}
+
+export interface AreaStatistics {
+  totalTransactions: number;
+  priceDistribution: Distribution[];
+  ageDistribution: Distribution[];
+  sizeDistribution: Distribution[];
+}
+
+export interface Distribution {
+  range: number;
+  count: number;
+}
+
+// API関数
+export const getAreaAnalysis = async (prefecture: string, city: string): Promise<AreaAnalysis> => {
   const response = await api.get<AreaAnalysis>('/analysis/area', {
-    params: { prefecture, city }
+      params: { prefecture, city }
   });
   return response.data;
 };
 
-export const fetchProperties = async (prefecture: string, city: string): Promise<Property[]> => {
-  const response = await api.get<Property[]>('/properties/fetch', {
-    params: { prefecture, city }
+export const getAreaStatistics = async (prefecture: string, city: string): Promise<AreaStatistics> => {
+  const response = await api.get<AreaStatistics>('/analysis/statistics', {
+      params: { prefecture, city }
   });
   return response.data;
 };

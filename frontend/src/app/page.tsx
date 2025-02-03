@@ -13,6 +13,8 @@ import { SortSelect, type SortOption } from "@/components/custom/SortSelect";
 import { fetchAreaAnalysis, fetchProperties, type AreaAnalysis, type Property } from "@/lib/api";
 import { decodeFiltersFromUrl } from '@/lib/urlParams';
 import { PropertyFilters as PropertyFiltersType } from "@/types/filters";
+import { TimeSeriesAnalysis } from '@/components/custom/TimeSeriesAnalysis';
+import { PriceHeatmap } from '@/components/custom/PriceHeatmap';
 
 export default function Home() {
   const router = useRouter();
@@ -172,6 +174,11 @@ export default function Home() {
 
             <PropertyMap properties={sortedAndFilteredProperties} />
             <DetailedStats properties={sortedAndFilteredProperties} />
+
+            <div className="grid grid-cols-1 gap-8">
+              <TimeSeriesAnalysis properties={sortedAndFilteredProperties} />
+              <PriceHeatmap properties={sortedAndFilteredProperties} />
+            </div>
           </>
         )}
       </div>

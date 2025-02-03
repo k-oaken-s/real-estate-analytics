@@ -1,4 +1,7 @@
-import React from 'react';
+'use client';
+
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { PriceTrend } from "@/lib/api";
 import {
   LineChart,
   Line,
@@ -6,57 +9,55 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
+  Legend,
   ResponsiveContainer
 } from 'recharts';
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
-interface PriceTrendData {
-  month: string;
-  price: number;
-  change: number;
-}
+import { format } from 'date-fns';
+import { ja } from 'date-fns/locale';
 
 interface PriceTrendChartProps {
-  data: PriceTrendData[];
+  trends: PriceTrend[];
 }
 
-export const PriceTrendChart: React.FC<PriceTrendChartProps> = ({ data }) => {
+export const PriceTrendChart: React.FC<PriceTrendChartProps> = ({ trends }) => {
   return (
     <Card>
       <CardHeader>
         <CardTitle>価格トレンド</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="h-[400px] w-full">
+        <div className="h-[400px]">
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart
-              data={data}
-              margin={{
-                top: 5,
-                right: 30,
-                left: 20,
-                bottom: 5,
-              }}
-            >
+            <LineChart data={trends}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis 
+              <XAxis
                 dataKey="month"
-                tickFormatter={(value) => value.substring(5)} // "2024-01" → "01"
+                tickFormatter={(value) => format(new Date(value), 'yyyy年MM月', { locale: ja })}
               />
-              <YAxis 
-                tickFormatter={(value) => `${(value / 10000).toFixed(0)}万`}
+              <YAxis
+                yAxisId="price"
+                tickFormatter={(value) => `${(value / 10000).toFixed(0)}万円`}
               />
-              <Tooltip 
-                formatter={(value: number) => [`${value.toLocaleString()}円/㎡`, "価格"]}
-                labelFormatter={(label) => `${label}月`}
+              <YAxis
+                yAxisId="count"
+                orientation="right"
+                dataKey="transactionCount"
+              />
+              <Tooltip />
+              <Legend />
+              <Line
+                yAxisId="price"
+                type="monotone"
+                dataKey="averagePrice"
+                stroke="#2563eb"
+                name="平均価格"
               />
               <Line
+                yAxisId="count"
                 type="monotone"
-                dataKey="price"
-                stroke="#2563eb"
-                strokeWidth={2}
-                dot={{ r: 4 }}
-                activeDot={{ r: 8 }}
+                dataKey="transactionCount"
+                stroke="#10b981"
+                name="取引件数"
               />
             </LineChart>
           </ResponsiveContainer>

@@ -45,3 +45,21 @@ func (h *AnalysisHandler) GetAreaAnalysis(c *gin.Context) {
 
     c.JSON(http.StatusOK, analysis)
 }
+
+func (h *AnalysisHandler) GetAreaStatistics(c *gin.Context) {
+    prefecture := c.Query("prefecture")
+    city := c.Query("city")
+
+    if prefecture == "" || city == "" {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "prefecture and city are required"})
+        return
+    }
+
+    stats, err := h.analysisService.GetAreaStatistics(c, prefecture, city)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+        return
+    }
+
+    c.JSON(http.StatusOK, stats)
+}
